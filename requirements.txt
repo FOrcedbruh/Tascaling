@@ -1,0 +1,8 @@
+fastapi
+tortoise-orm[asyncpg]
+pydantic
+bcrypt
+pyjwt
+aerich
+aiobotocore
+boto3
