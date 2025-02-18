@@ -5,7 +5,7 @@ from tortoise import Model, fields
 class Task(Model):
     id = fields.BigIntField(pk=True)
 
-    title = fields.CharField(null=False, max_length=100)
+    title = fields.CharField(null=False, max_length=100, db_index=True)
     description = fields.CharField(null=True, max_length=600)
     date_to_complete = fields.DatetimeField(null=True)
     complete = fields.BooleanField(default=False)

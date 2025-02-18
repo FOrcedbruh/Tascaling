@@ -11,6 +11,7 @@ class User(Model):
     username = fields.CharField(max_length=12, unique=True)
     age = fields.IntField()
     avatar = fields.CharField(null=True, max_length=100000)
+    password = fields.BinaryField(null=False)
 
     tasks = fields.ReverseRelation["Task"]
     ideas = fields.ReverseRelation["Idea"]
