@@ -18,12 +18,12 @@ class UserUpdateSchema(BaseModel):
     avatar: str | None = None
 
     @field_validator("age")
-    def validate_age(self):
-        if self.age > 100:
+    @classmethod
+    def validate_age(cls, age):
+        if age > 100:
             raise HTTPException(
                 detail="Age too large",
                 status_code=400
             )
-        return self
-
+        return age
 

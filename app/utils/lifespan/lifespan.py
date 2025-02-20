@@ -7,10 +7,10 @@ from fastapi import FastAPI
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # aerich_command = aerich.Command(
-    #     tortoise_config=DB_CONFIG,
-    #     location="../../migrations"
-    # )
-    # await aerich_command.init()
-    # await aerich_command.upgrade()
+    aerich_command = aerich.Command(
+        tortoise_config=DB_CONFIG,
+        location="app/migrations"
+    )
+    await aerich_command.init()
+    await aerich_command.upgrade()
     yield
