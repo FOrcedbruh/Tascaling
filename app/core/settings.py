@@ -23,6 +23,7 @@ class JWTSettings(BaseModel):
     access_token_expired_minutes: int = 30 # 30 minutes
     refresh_token_expired_minutes: int = 60 * 60 * 24 # 1 day
     secret: str = JWT_SECRET
+    algorithm: str = "HS256"
 
 
 MODELS: list = [
