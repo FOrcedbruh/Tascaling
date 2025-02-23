@@ -13,12 +13,22 @@ class UsersRepository(BaseRepository):
     async def get_all(self, limit: int = 100, offset: int = 0) -> list[User]:
         return await self.table.filter().limit(limit).offset(offset)
     
-    async def create_one(self, data: User) -> User:
-        return await self.table.create(data)
+    async def create_one(self, data: dict) -> User:
+        return await self.table.create(**data)
     
     async def delete_one(self, id: int) -> None:
         row_to_delete = await self.table.get(id=id)
         await self.table.delete(row_to_delete)
+
+    async def get_user_by_username(self, data: str) -> User:
+        row = await User.get_or_none(username=data)
+        if not row:
+            raise UserNotFound(f"User with username {data} does not exists")
+        return row
+    
+    async def get_user_for_create(self, data: str) -> User:
+        row = await User.get_or_none(username=data)
+        return row
 
     async def get_user_with_relations(self, id: int, ideas: bool = False, tasks: bool = True):
         user = None
