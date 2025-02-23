@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from app.depends import get_settings
+from app.core.settings import get_settings
 from app.utils.lifespan.lifespan import lifespan
 from app.presentation import router
 from app.utils.exceptions.base import BaseException

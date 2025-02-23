@@ -20,7 +20,7 @@ class DatabaseSettings(BaseModel):
     db_url: str = DB_URL
 
 class JWTSettings(BaseModel):
-    access_token_expired_minutes: int = 30 # 30 minutes
+    access_token_expired_minutes: int = 60 # 1 hour
     refresh_token_expired_minutes: int = 60 * 60 * 24 # 1 day
     secret: str = JWT_SECRET
     algorithm: str = "HS256"
@@ -35,3 +35,6 @@ class Settings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     models: list = MODELS
     jwt: JWTSettings = JWTSettings()
+
+def get_settings() -> Settings:
+    return Settings()
