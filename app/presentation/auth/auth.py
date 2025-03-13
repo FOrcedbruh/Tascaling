@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Body
-from app.dto.auth.auth import LoginSuccessSchema, LoginSchema, RegistrationSchema
+from app.dto.auth.auth import LoginSuccessSchema, LoginSchema, RegistrationSchema, RerfreshTokenRequestSchema
 from app.services import AuthService
 from app.depends import get_auth_service
 
@@ -20,3 +20,10 @@ async def registration(
     auth_service: AuthService = Depends(get_auth_service)
 ) -> LoginSuccessSchema:
     return await auth_service.registration(data=user)
+
+@router.post("/refresh", response_model=LoginSuccessSchema, response_model_exclude_none=True)
+async def refresh(
+    data: RerfreshTokenRequestSchema = Body(),
+    auth_service: AuthService = Depends(get_auth_service)
+) -> LoginSuccessSchema:
+    return await auth_service.refresh(refresh_token=data.refresh_token)

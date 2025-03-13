@@ -12,5 +12,10 @@ class BadPassword(AuthException):
         super().__init__(status, detail)
 
 class UserAlreadyExists(AuthException):
-    def __init__(self, status = 400, detail = "Authorization error"):
+    def __init__(self, status = 400, detail = "User already exists"):
+        super().__init__(status, detail)
+
+
+class InvalidToken(AuthException):
+    def __init__(self, status = 400, detail = "Invalid token or token expired"):
         super().__init__(status, detail)

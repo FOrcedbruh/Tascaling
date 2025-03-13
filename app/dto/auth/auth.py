@@ -22,11 +22,15 @@ class RegistrationSchema(LoginSchema):
 class JWTPayloadAccessSchema(BaseModel):
     username: str
     age: int
-    sub: int = Field(alias="id")
+    sub: str
 
 
 class JWTPayloadRefreshSchema(BaseModel):
-    sub: int = Field(alias="id")
+    sub: str
+
+
+class RerfreshTokenRequestSchema(BaseModel):
+    refresh_token: str
 
 class LoginSuccessSchema(BaseModel):
     access_token: str | None = None
