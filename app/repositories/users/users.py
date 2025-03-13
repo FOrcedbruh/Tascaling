@@ -7,7 +7,7 @@ class UsersRepository(BaseRepository):
     table = User
 
     async def get_one_by_id(self, id: int) -> User:
-        user = await self.table.get(id=id)
+        user = await self.table.get_or_none(id=id)
         return user
     
     async def get_all(self, limit: int = 100, offset: int = 0) -> list[User]:
@@ -30,16 +30,10 @@ class UsersRepository(BaseRepository):
         row = await User.get_or_none(username=data)
         return row
 
-    async def get_user_with_relations(self, id: int, ideas: bool = False, tasks: bool = True):
-        user = None
-        if tasks:
-            user = await self.table.get(id=id).prefetch_related("tasks")
-        elif ideas:
-            user = await self.table.get(id=id).prefetch_related("ideas")
-        elif ideas and tasks:
-            user =  await self.table.get(id=id).prefetch_related("tasks").prefetch_related("ideas")
+    async def get_user_with_ideas_and_tasks(self, id: int):
+        user = await self.table.get_or_none(id=id)
         
-        if user is None:
+        if not user:
             raise UserNotFound(f"User with id {id} does not exists")
         return user
     
