@@ -13,8 +13,8 @@ class TasksRepository(BaseRepository):
         row = await self.table.get_or_none(id=id)
         return row
 
-    async def get_all(self, limit: int, offset: int) -> list[Task]:
-        return await self.table.filter().limit(limit).offset(offset)
+    async def get_all(self, limit: int, offset: int, order_by: str, asc: bool) -> list[Task]:
+        return await self.table.filter().limit(limit).offset(offset).order_by(f"{order_by if asc else f"-{order_by}"}")
     
     async def create_one(self, data: dict) -> Task:
         row = await self.table.create(**data)

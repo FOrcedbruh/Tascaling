@@ -1,7 +1,7 @@
 from app.dto.tasks.tasks import TaskCreateSchema, TaskReadSchema, TaskUpdateSchema
 from app.repositories import TasksRepository
 from app.utils.exceptions.NotFoundExceptions import TaskNotFound
-
+from app.dto.pagination.pagination import BaseParamsSchema
 
 class TasksService:
 
@@ -33,3 +33,8 @@ class TasksService:
         return {
             "message": f"Task with id {id} successfully deleted"
         }
+    
+    async def get_all_tasks(self, query_params: BaseParamsSchema) -> list[TaskReadSchema]:
+        return await self.repository.get_all(
+            **query_params.model_dump(exclude_none=True)
+        )
