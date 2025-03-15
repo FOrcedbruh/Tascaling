@@ -2,7 +2,7 @@ from tortoise import Model, fields
 from enum import Enum
 
 
-class TaskStatuses(str, Enum):
+class TaskStatus(str, Enum):
     CREATED = "CREATED"
     IN_PROGRESS = "IN_PROGRESS"
     COMPLETED = "COMPLETED"
@@ -13,7 +13,7 @@ class Task(Model):
     title = fields.CharField(null=False, max_length=100, db_index=True)
     description = fields.CharField(null=True, max_length=600)
     date_to_complete = fields.DatetimeField(null=True)
-    status = fields.CharEnumField(enum_type=TaskStatuses, max_length=50)
+    status = fields.CharEnumField(enum_type=TaskStatus, default=TaskStatus.CREATED)
 
     user = fields.ForeignKeyField("models.User", related_name="tasks")
 
