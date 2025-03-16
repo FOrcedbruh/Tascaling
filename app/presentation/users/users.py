@@ -3,8 +3,11 @@ from app.dto.pagination.pagination import BaseParamsSchema
 from app.dto.users.users import UserReadSchema, UserUpdateSchema, UserQueryParamsSchema
 from app.depends import get_user_service
 from app.services import UsersService
+from app.core.middleware import AuthHTTPBearer
 
-router = APIRouter(prefix="/users", tags=["Users"])
+secutiry = AuthHTTPBearer()
+
+router = APIRouter(prefix="/users", tags=["Users"], dependencies=[Depends(secutiry)])
 
 
 

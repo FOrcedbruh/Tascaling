@@ -6,6 +6,7 @@ from app.presentation import router
 from app.utils.exceptions.base import BaseException
 from starlette.requests import Request
 from starlette.exceptions import HTTPException
+from app.core.middleware import middlewares
 
 settings = get_settings()
 
@@ -14,7 +15,8 @@ app = FastAPI(
     title="Tascaling",
     description="Server side of Tascaling application",
     lifespan=lifespan,
-    docs_url="/swagger"
+    docs_url="/swagger",
+    middleware=middlewares
 )
 app.include_router(router=router)
 

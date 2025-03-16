@@ -41,7 +41,10 @@ class UsersRepository(BaseRepository):
         user = await User.get_or_none(id=id)
         if not user:
             raise UserNotFound(f"User with id {id} does not exists")
-        return user.update_from_dict(data)
+        await user.update_from_dict(data)
+        await user.save()
+        
+        return user
 
 
     

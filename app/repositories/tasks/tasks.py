@@ -34,4 +34,5 @@ class TasksRepository(BaseRepository):
             raise TaskNotFound(detail=f"Task with id {id} not found")
         
         await row.update_from_dict(data)
+        await row.save()
         return row
