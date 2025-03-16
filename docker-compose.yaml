@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: app
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 8000:8080
+    restart: always
+    depends_on:
+      - db
+  db:
+    container_name: tascaling_postgres
+    image: postgres:17-alpine
+    ports:
+      - 5440:5432
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "tascaling_db"
+      POSTGRES_USER: "postgres"
+    volumes:
+      - .postgres:/var/lib/postgresql/data
+  
