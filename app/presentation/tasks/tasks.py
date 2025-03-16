@@ -3,8 +3,11 @@ from app.dto.tasks.tasks import TaskReadSchema, TaskCreateSchema, TaskUpdateSche
 from app.services import TasksService
 from app.depends import get_tasks_service
 from app.dto.pagination.pagination import BaseParamsSchema
+from app.core.middleware import AuthHTTPBearer
 
-router = APIRouter(prefix="/tasks", tags=["Task"])
+security = AuthHTTPBearer()
+
+router = APIRouter(prefix="/tasks", tags=["Task"], dependencies=[Depends(security)])
 
 
 @router.get("/{id}", response_model=TaskReadSchema)
