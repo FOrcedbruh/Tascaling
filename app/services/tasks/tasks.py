@@ -2,6 +2,8 @@ from app.dto.tasks.tasks import TaskCreateSchema, TaskReadSchema, TaskUpdateSche
 from app.repositories import TasksRepository
 from app.utils.exceptions.NotFoundExceptions import TaskNotFound
 from app.dto.pagination.pagination import BaseParamsSchema
+from tortoise.transactions import atomic
+
 
 class TasksService:
 

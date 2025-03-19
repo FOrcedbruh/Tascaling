@@ -8,3 +8,4 @@ __all__ = (
 from app.services.users.users import UsersService
 from app.services.auth.auth import AuthService
 from app.services.tasks.tasks import TasksService
+from app.services.statistics.statistics import StatisticService

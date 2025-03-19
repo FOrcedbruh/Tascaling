@@ -10,6 +10,8 @@ PORT: int = os.environ.get("PORT")
 HOST: str = os.environ.get("HOST")
 DB_URL: str = os.environ.get("DB_URL")
 JWT_SECRET: str = os.environ.get("JWT_SECRET")
+CACHE_PORT: int = os.environ.get("REDIS_PORT")
+CACHE_HOST: str = os.environ.get("REDIS_HOST")
 
 
 class RunSettings(BaseModel):
@@ -26,15 +28,25 @@ class JWTSettings(BaseModel):
     algorithm: str = "HS256"
 
 
+class CacheSettings(BaseModel):
+    host: str = CACHE_HOST
+    port: int = CACHE_PORT
+    ttl: int = 30 # 30 seconds
+    url: str = f"redis://{CACHE_HOST}:{CACHE_PORT}"
+    
+
 MODELS: list = [
     "app.models"
 ]
+
 
 class Settings(BaseSettings):
     run: RunSettings = RunSettings()
     db: DatabaseSettings = DatabaseSettings()
     models: list = MODELS
     jwt: JWTSettings = JWTSettings()
+    cache: CacheSettings = CacheSettings()
+
 
 def get_settings() -> Settings:
     return Settings()

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query, Depends, Body
 from app.dto.pagination.pagination import BaseParamsSchema
-from app.dto.users.users import UserReadSchema, UserUpdateSchema, UserQueryParamsSchema
+from app.dto.users.users import UserReadSchema, UserUpdateSchema, UserQueryParamsSchema, UserOnlyReadSchema
 from app.depends import get_user_service
 from app.services import UsersService
 from app.core.middleware import AuthHTTPBearer
@@ -20,10 +20,10 @@ async def get_user(
     return await user_service.get_user_by_id(id, params)
 
 
-@router.patch("/{id}", response_model=UserReadSchema)
+@router.patch("/{id}", response_model=UserOnlyReadSchema)
 async def update_user(
     id: int,
     user: UserUpdateSchema = Body(),
     user_service: UsersService = Depends(get_user_service)
-) -> UserReadSchema:
+) -> UserOnlyReadSchema:
     return await user_service.update_user_by_id(id=id, data=user)
