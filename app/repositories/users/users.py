@@ -1,7 +1,7 @@
 from app.repositories.abc_repository import BaseRepository
 from app.models import User
 from app.utils.exceptions import UserNotFound
-
+from tortoise import Tortoise
 
 class UsersRepository(BaseRepository):
     table = User
@@ -21,13 +21,13 @@ class UsersRepository(BaseRepository):
         await self.table.delete(row_to_delete)
 
     async def get_user_by_username(self, data: str) -> User:
-        row = await User.get_or_none(username=data)
+        row = await self.table.get_or_none(username=data)
         if not row:
             raise UserNotFound(f"User with username {data} does not exists")
         return row
     
     async def get_user_for_create(self, data: str) -> User:
-        row = await User.get_or_none(username=data)
+        row = await self.table.get_or_none(username=data)
         return row
 
     async def get_user_with_ideas_and_tasks(self, id: int):
@@ -37,14 +37,14 @@ class UsersRepository(BaseRepository):
             raise UserNotFound(f"User with id {id} does not exists")
         return user
     
-    async def update_user_by_id(self, id: int, data: dict) -> User:
-        user = await User.get_or_none(id=id)
+    async def update_user_by_id(self, id: int, data: dict) -> dict:
+        user = await self.table.get_or_none(id=id)
         if not user:
             raise UserNotFound(f"User with id {id} does not exists")
         await user.update_from_dict(data)
         await user.save()
-        
         return user
+
 
 
     

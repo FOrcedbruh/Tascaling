@@ -4,6 +4,9 @@ from app.utils.jwt.hash_password import hash_password, validate_password
 from app.utils.exceptions.AuthExceptions import BadPassword, UserAlreadyExists, InvalidToken
 from app.utils.jwt.create import create_access_token, create_refresh_token
 from app.utils.jwt.encode_decode import decode_jwt
+from tortoise.transactions import atomic
+from app.models import Statistics
+
 
 class AuthService():
 
@@ -30,6 +33,7 @@ class AuthService():
             refresh_token=refresh_token
         )
     
+    @atomic()
     async def registration(self, data: RegistrationSchema) -> LoginSuccessSchema:
         user = await self.repository.get_user_for_create(data=data.username)
         if user:
@@ -41,6 +45,7 @@ class AuthService():
         data_dict["password"] = hashed_password
 
         user = await self.repository.create_one(data=data_dict)
+        await Statistics.create(user_id=user.id)
 
         payload_access_data = JWTPayloadAccessSchema(age=user.age, username=user.username, sub=str(user.id))
         payload_refresh_data = JWTPayloadRefreshSchema(sub=str(user.id))

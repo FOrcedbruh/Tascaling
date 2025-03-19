@@ -1,5 +1,5 @@
 from app.repositories import UsersRepository
-from app.dto.users.users import UserReadSchema, UserUpdateSchema, UserQueryParamsSchema
+from app.dto.users.users import UserReadSchema, UserUpdateSchema, UserQueryParamsSchema, UserOnlyReadSchema
 from app.dto.tasks.tasks import TaskReadSchema
 
 
@@ -23,6 +23,9 @@ class UsersService:
             ideas=ideas
         )
     
-    async def update_user_by_id(self, id: int, data: UserUpdateSchema) -> UserReadSchema:
-        return await self.repository.update_user_by_id(id=id, data=data.model_dump(exclude_none=True))
+    async def update_user_by_id(self, id: int, data: UserUpdateSchema) -> UserOnlyReadSchema:
+        row = await self.repository.update_user_by_id(id=id, data=data.model_dump(exclude_none=True))
+        return UserOnlyReadSchema(**row.__dict__)
+    
+    
     
