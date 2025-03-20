@@ -19,8 +19,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
         request.scope["user"] = await get_user(request, user_repository)
         
         return await call_next(request)
-    
-
 
 
 async def get_user(request: Request, repository: UsersRepository) -> User:
@@ -32,7 +30,6 @@ async def get_user(request: Request, repository: UsersRepository) -> User:
     user = await repository.get_one_by_id(id=int(payload["sub"]))
     if not user:
         return None
-
     return user
 
 class AuthHTTPBearer(HTTPBearer):
