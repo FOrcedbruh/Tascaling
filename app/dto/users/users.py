@@ -13,7 +13,6 @@ class UserOnlyReadSchema(BaseModel):
     username: str = Field(min_length=4, max_length=20)
     age: int
     avatar: str | None = None
-    ideas: Any = None
 
     created_at: datetime
 

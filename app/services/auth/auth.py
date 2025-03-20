@@ -1,11 +1,12 @@
 from app.repositories import UsersRepository
 from app.dto.auth.auth import LoginSchema, RegistrationSchema, LoginSuccessSchema, JWTPayloadAccessSchema, JWTPayloadRefreshSchema
+from app.dto.users.users import UserOnlyReadSchema
 from app.utils.jwt.hash_password import hash_password, validate_password
 from app.utils.exceptions.AuthExceptions import BadPassword, UserAlreadyExists, InvalidToken
 from app.utils.jwt.create import create_access_token, create_refresh_token
 from app.utils.jwt.encode_decode import decode_jwt
 from tortoise.transactions import atomic
-from app.models import Statistics
+from app.models import Statistics, User
 
 
 class AuthService():
@@ -71,3 +72,6 @@ class AuthService():
         return LoginSuccessSchema(
             access_token=access_token
         )
+    
+    async def me(self, user: User) -> UserOnlyReadSchema:
+        return await self.repository.get_one_by_id(id=user.id)

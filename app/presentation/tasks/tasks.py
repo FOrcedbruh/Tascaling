@@ -4,6 +4,7 @@ from app.services import TasksService
 from app.depends import get_tasks_service
 from app.dto.pagination.pagination import BaseParamsSchema
 from app.core.middleware import AuthHTTPBearer
+from starlette.requests import Request
 
 security = AuthHTTPBearer()
 
@@ -13,7 +14,7 @@ router = APIRouter(prefix="/tasks", tags=["Task"], dependencies=[Depends(securit
 @router.get("/{id}", response_model=TaskReadSchema)
 async def get_task(
     id: int,
-    tasks_service: TasksService = Depends(get_tasks_service)
+    tasks_service: TasksService = Depends(get_tasks_service),
 ) -> TaskReadSchema:
     return await tasks_service.get_task_by_id(id)
 
@@ -41,3 +42,11 @@ async def get_all_tasks(
 ) -> list[TaskReadSchema]:
     return await tasks_service.get_all_tasks(query_params)
 
+
+
+@router.delete("/{id}", response_model=dict)
+async def delete_task(
+    id: int,
+    tasks_service: TasksService = Depends(get_tasks_service)
+) -> dict:
+    return await tasks_service.delete_task(id)
