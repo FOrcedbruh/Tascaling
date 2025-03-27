@@ -5,7 +5,6 @@ from app.depends import get_auth_service
 from starlette.requests import Request
 from app.dto.users.users import UserOnlyReadSchema
 
-
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 

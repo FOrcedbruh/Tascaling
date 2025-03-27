@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+  # main app config
   app:
     container_name: app
     build: .
@@ -12,6 +13,7 @@ services:
     depends_on:
       - db
       - redis
+      - kafka
   db:
     container_name: tascaling_postgres
     image: postgres:17-alpine
@@ -23,6 +25,8 @@ services:
       POSTGRES_USER: "postgres"
     volumes:
       - .postgres:/var/lib/postgresql/data
+
+  # redis-cache docker config
   redis:
     container_name: tascaling_redis
     image: redis:latest
@@ -30,4 +34,23 @@ services:
       - ${REDIS_PORT}:6379
     command: ["redis-server"]
     restart: always
+
+  # kafka docker config
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:latest
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
   

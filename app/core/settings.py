@@ -12,7 +12,7 @@ DB_URL: str = os.environ.get("DB_URL")
 JWT_SECRET: str = os.environ.get("JWT_SECRET")
 CACHE_PORT: int = os.environ.get("REDIS_PORT")
 CACHE_HOST: str = os.environ.get("REDIS_HOST")
-
+KAFKA_SERVER: str = os.environ.get("KAFKA_SERVER")
 
 class RunSettings(BaseModel):
     port: int = PORT
@@ -33,6 +33,11 @@ class CacheSettings(BaseModel):
     port: int = CACHE_PORT
     ttl: int = 30 # 30 seconds
     url: str = f"redis://{CACHE_HOST}:{CACHE_PORT}"
+
+
+class KafkaSettings(BaseModel):
+    server: str = KAFKA_SERVER
+    mail_topic: str = "mails"
     
 
 MODELS: list = [
@@ -46,6 +51,7 @@ class Settings(BaseSettings):
     models: list = MODELS
     jwt: JWTSettings = JWTSettings()
     cache: CacheSettings = CacheSettings()
+    kafka: KafkaSettings = KafkaSettings()
 
 
 def get_settings() -> Settings:
