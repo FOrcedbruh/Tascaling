@@ -1,5 +1,5 @@
 from app.repositories import UsersRepository
-from app.dto.auth.auth import LoginSchema, RegistrationSchema, LoginSuccessSchema, JWTPayloadAccessSchema, JWTPayloadRefreshSchema
+from app.dto.auth.auth import *
 from app.dto.users.users import UserOnlyReadSchema
 from app.utils.jwt.hash_password import hash_password, validate_password
 from app.utils.exceptions.AuthExceptions import BadPassword, UserAlreadyExists, InvalidToken
@@ -7,6 +7,8 @@ from app.utils.jwt.create import create_access_token, create_refresh_token
 from app.utils.jwt.encode_decode import decode_jwt
 from tortoise.transactions import atomic
 from app.models import Statistics, User
+from app.utils.broker import KafkaClient
+from app.utils.mail_content.content import MailContent
 
 
 class AuthService():
@@ -28,6 +30,9 @@ class AuthService():
 
         access_token: str = create_access_token(data=payload_access_data)
         refresh_token: str = create_refresh_token(data=payload_refresh_data)
+
+        content = MailContent.get_login_content(user.email, user.username)
+        await KafkaClient.produce_mail(KafkaClient.get_producer(), content)
 
         return LoginSuccessSchema(
             access_token=access_token,
@@ -53,6 +58,9 @@ class AuthService():
 
         access_token: str = create_access_token(data=payload_access_data)
         refresh_token: str = create_refresh_token(data=payload_refresh_data)
+
+        content = MailContent.get_reg_content(mail=user.email, username=user.username)
+        await KafkaClient.produce_mail(KafkaClient.get_producer(), content)
 
         return LoginSuccessSchema(
             access_token=access_token,

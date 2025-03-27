@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, EmailStr
 from starlette.exceptions import HTTPException
 
 class LoginSchema(BaseModel):
@@ -7,6 +7,7 @@ class LoginSchema(BaseModel):
 
 class RegistrationSchema(LoginSchema):
     age: int
+    email: EmailStr
 
     @field_validator("age")
     @classmethod

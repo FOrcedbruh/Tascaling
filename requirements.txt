@@ -1,6 +1,6 @@
 fastapi
 tortoise-orm[asyncpg]
-pydantic
+pydantic[email]
 bcrypt
 pyjwt
 aerich
@@ -11,3 +11,4 @@ python-dotenv
 tomlkit
 uvicorn
 redis
+aiokafka
